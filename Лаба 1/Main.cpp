@@ -16,6 +16,11 @@ struct TLong
 
 void StrToTLongInt(string str,TLongInt &A)
 {
+	while (str[0] == '0' && str.length() > 1)
+	{
+		str.erase(0, 1);
+	};
+
 	int temp = 1;
 
 	for (int i = str.length(); str.length() > 1; i -= 2)
@@ -38,6 +43,11 @@ void StrToTLongInt(string str,TLongInt &A)
 
 void StrToTLongR(string str, TLongInt &R)
 {
+	while (str[str.length()-1] == '0' && str.length() > 1)
+	{
+		str.erase(str.length() - 1, 1);
+	};
+
 	int temp = 1;
 
 	for (int i = 0; i < str.length(); i += 2)
