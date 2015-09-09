@@ -111,14 +111,12 @@ int main()
 
 	cout << "\n";
 
-	/*
 	flag = Read_TLong(fin, B);
 
 	for (int i = 0; i <= B.I[0]; i++)
 	{
 		cout << (int)B.I[i] << " | ";
 	}
-	*/
 
 	cout << "\n";
 
