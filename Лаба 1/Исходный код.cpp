@@ -52,7 +52,6 @@ bool Read_TLong(ifstream &fin, TLong& A)
 		}
 		else
 		{
-			cout << str.substr(0, str.find('.')) << endl;
 			StrToTLongInt(str.substr(0,str.find('.')), A.I);
 			return true;
 		};
