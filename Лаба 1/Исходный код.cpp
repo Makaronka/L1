@@ -36,6 +36,29 @@ void StrToTLongInt(string str,TLongInt &A)
 	return ;
 }
 
+void StrToTLongR(string str, TLongInt &R)
+{
+	int temp = 1;
+
+	for (int i = 0; i < str.length(); i += 2)
+	{
+		R[temp] = atoi(str.substr(i, 2).c_str());
+		temp++;
+	}
+
+	str.erase(0, temp * 2);
+
+	if (str.length())
+	{
+		R[temp] = atoi(str.c_str());
+	}
+	else temp--;
+
+	R[0] = temp;
+
+	return;
+}
+
 bool Read_TLong(ifstream &fin, TLong& A)
 {
 	if (fin.is_open())
@@ -53,6 +76,8 @@ bool Read_TLong(ifstream &fin, TLong& A)
 		else
 		{
 			StrToTLongInt(str.substr(0,str.find('.')), A.I);
+			str.erase(0,str.find('.') + 1);
+			StrToTLongR(str.substr(0, str.length()), A.R);
 			return true;
 		};
 	}
@@ -79,12 +104,21 @@ int main()
 
 	cout << "\n";
 
+	for (int i = 0; i <= A.R[0]; i++)
+	{
+		cout << (int)A.R[i] << " | ";
+	}
+
+	cout << "\n";
+
+	/*
 	flag = Read_TLong(fin, B);
 
 	for (int i = 0; i <= B.I[0]; i++)
 	{
 		cout << (int)B.I[i] << " | ";
 	}
+	*/
 
 	cout << "\n";
 
