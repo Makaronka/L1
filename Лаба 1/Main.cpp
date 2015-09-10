@@ -120,7 +120,7 @@ void Write_TLong(ostream &fout, TLong A)
 				fout << "0";
 			}
 
-			fout << (int)A.R[i];
+			fout << (int)A.R[i];  
 		};
 		fout << (int)A.R[A.R[0]];
 	}
@@ -128,6 +128,29 @@ void Write_TLong(ostream &fout, TLong A)
 	return;
 }
 
+bool Equal_TLong(TLong A, TLong B)
+{
+	if (A.I[0] != B.I[0] || A.R[0] != B.R[0])
+	{
+		return false;
+	}
+	for (int i = 1; i <= A.I[0]; i++)
+	{
+		if (A.I[i] != B.I[i])
+		{
+			return false;
+		}
+	}
+	for (int i = 1; i <= A.R[0]; i++)
+	{
+		if (A.R[i] != B.R[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 
 int main()
 {
@@ -143,7 +166,9 @@ int main()
 	bool flag;
 
 	flag = Read_TLong(fin, A);
+	flag = Read_TLong(fin, B);
 
+	/*
 	for (int i = 0; i <= A.I[0]; i++)
 	{
 		cout << (int)A.I[i] << " | ";
@@ -158,16 +183,18 @@ int main()
 
 	cout << "\n";
 
-	flag = Read_TLong(fin, B);
-
 	for (int i = 0; i <= B.I[0]; i++)
 	{
 		cout << (int)B.I[i] << " | ";
 	}
+	*/
 
 	Write_TLong(fout,A);
 
-	cout << "\n";
+	if (Equal_TLong(A, B))
+	{
+		cout << "Kek\n";
+	}
 
 	system("pause");
 	return 0;
