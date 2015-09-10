@@ -29,7 +29,7 @@ void StrToTLongInt(string str,TLongInt &A)
 		str.erase(i - 2, 2);
 		temp++;
 	}
-
+	
 	if (str.length())
 	{
 		A[temp] = atoi(str.c_str());
@@ -81,6 +81,7 @@ bool Read_TLong(ifstream &fin, TLong& A)
 		if (str.find('.') == str.npos)
 		{
 			StrToTLongInt(str, A.I);
+			A.R[0] = 0;
 			return true;
 		}
 		else
@@ -94,12 +95,48 @@ bool Read_TLong(ifstream &fin, TLong& A)
 	else return false;
 }
 
+
+void Write_TLong(ostream &fout, TLong A)
+{
+	fout << (int)A.I[A.I[0]];
+
+	for (int i = A.I[0] - 1; i > 0; i--)
+	{
+		if (A.I[i] < 10)
+		{
+			fout << "0";
+		}
+
+		fout << (int)A.I[i];
+	};
+
+	if (A.R[0])
+	{
+		fout << ".";
+		for (int i = 1; i < A.R[0]; i++)
+		{
+			if (A.R[i] < 10)
+			{
+				fout << "0";
+			}
+
+			fout << (int)A.R[i];
+		};
+		fout << (int)A.R[A.R[0]];
+	}
+
+	return;
+}
+
+
 int main()
 {
 	setlocale(LC_ALL, "rus");
 
 	string file = "Text.txt";
+	string output = "Output.txt";
 	ifstream fin(file);
+	ofstream fout(output);
 	TLong A;
 	TLong B;
 
@@ -127,6 +164,8 @@ int main()
 	{
 		cout << (int)B.I[i] << " | ";
 	}
+
+	Write_TLong(fout,A);
 
 	cout << "\n";
 
