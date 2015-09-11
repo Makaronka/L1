@@ -19,7 +19,7 @@ void StrToTLongInt(string str,TLongInt &A)
 	while (str[0] == '0' && str.length() > 1)
 	{
 		str.erase(0, 1);
-	};
+	}
 
 	int temp = 1;
 
@@ -46,7 +46,7 @@ void StrToTLongR(string str, TLongInt &R)
 	while (str[str.length()-1] == '0' && str.length() > 1)
 	{
 		str.erase(str.length() - 1, 1);
-	};
+	}
 
 	int temp = 1;
 
@@ -90,7 +90,7 @@ bool Read_TLong(ifstream &fin, TLong& A)
 			str.erase(0,str.find('.') + 1);
 			StrToTLongR(str.substr(0, str.length()), A.R);
 			return true;
-		};
+		}
 	}
 	else return false;
 }
@@ -108,7 +108,7 @@ void Write_TLong(ostream &fout, TLong A)
 		}
 
 		fout << (int)A.I[i];
-	};
+	}
 
 	if (A.R[0])
 	{
@@ -121,10 +121,11 @@ void Write_TLong(ostream &fout, TLong A)
 			}
 
 			fout << (int)A.R[i];  
-		};
+		}
 		fout << (int)A.R[A.R[0]];
 	}
 
+	fout << endl;
 	return;
 }
 
@@ -152,6 +153,47 @@ bool Equal_TLong(TLong A, TLong B)
 	return true;
 }
 
+bool Less_TLong(TLong A, TLong B)
+{
+	if (B.I[0] > A.I[0])
+	{
+		return false;
+	}
+
+	if (!(Equal_TLong(A, B)) && (A.I[0] == B.I[0]))
+	{
+		for (int i = A.I[0]; i > 0 ; i--)
+		{
+			if (A.I[i] < B.I[i])
+			{
+				return false;
+			}
+		}
+		if (A.R[0] < B.R[0])
+		{
+			for (int i = 1; i <= A.R[0]; i++)
+			{
+				if (A.R[i] < B.R[i])
+				{
+					return false;
+				}
+			}
+			return false;
+		}
+		else
+		{
+			for (int i = 1; i <= B.R[0]; i++)
+			{
+				if (A.R[i] < B.R[i])
+				{
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "rus");
@@ -168,33 +210,11 @@ int main()
 	flag = Read_TLong(fin, A);
 	flag = Read_TLong(fin, B);
 
-	/*
-	for (int i = 0; i <= A.I[0]; i++)
-	{
-		cout << (int)A.I[i] << " | ";
-	}
+	Write_TLong(fout, A);
+	Write_TLong(fout, B);
 
-	cout << "\n";
-
-	for (int i = 0; i <= A.R[0]; i++)
-	{
-		cout << (int)A.R[i] << " | ";
-	}
-
-	cout << "\n";
-
-	for (int i = 0; i <= B.I[0]; i++)
-	{
-		cout << (int)B.I[i] << " | ";
-	}
-	*/
-
-	Write_TLong(fout,A);
-
-	if (Equal_TLong(A, B))
-	{
-		cout << "Kek\n";
-	}
+	Write_TLong(cout, A);
+	Write_TLong(cout, B);
 
 	system("pause");
 	return 0;
