@@ -1,4 +1,4 @@
-п»ї#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -13,6 +13,18 @@ struct TLong
 	TLongInt I;
 	TLongInt R;
 };
+
+bool CheckStr(string s)
+{ 
+	for (int i = 0; i < s.length(); i++)
+	{
+		if (!isdigit(s[i]))
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 void DelZero(TLong &A)
 {
@@ -98,7 +110,7 @@ void Round_TLong(TLong &A)
 	return;
 }
 
-void StrToTLongInt(string str,TLongInt &A)
+void StrToTLongInt(string str, TLongInt &A)
 {
 	while (str[0] == '0' && str.length() > 1)
 	{
@@ -113,7 +125,7 @@ void StrToTLongInt(string str,TLongInt &A)
 		str.erase(i - 2, 2);
 		temp++;
 	}
-	
+
 	if (str.length())
 	{
 		A[temp] = atoi(str.c_str());
@@ -122,12 +134,12 @@ void StrToTLongInt(string str,TLongInt &A)
 
 	A[0] = temp;
 
-	return ;
+	return;
 }
 
 void StrToTLongR(string str, TLongInt &R)
 {
-	while (str[str.length()-1] == '0' && str.length() > 1)
+	while (str[str.length() - 1] == '0' && str.length() > 1)
 	{
 		str.erase(str.length() - 1, 1);
 	}
@@ -164,22 +176,30 @@ bool Read_TLong(ifstream &fin, TLong& A)
 
 		if (str.find('.') == str.npos)
 		{
-			if (str.length() / 2 <= n - 1)
+			if ((str.length() / 2 <= n - 1) && CheckStr(str))
 			{
 				StrToTLongInt(str, A.I);
 				A.R[0] = 0;
 				return true;
 			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
-			if ((str.substr(0, str.find('.')).length() / 2 <= n - 1) && (str.substr(0, str.length()).length() / 2 <= n - 1))
+			if ((str.substr(0, str.find('.')).length() / 2 <= n - 1) && (str.substr(str.find('.') + 1, str.length()).length() / 2 <= n - 1) && CheckStr(str.substr(0, str.find('.'))) && CheckStr(str.substr(str.find('.') + 1, str.length())))
 			{
 				StrToTLongInt(str.substr(0, str.find('.')), A.I);
 				str.erase(0, str.find('.') + 1);
 				StrToTLongR(str.substr(0, str.length()), A.R);
 
 				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}
@@ -204,16 +224,28 @@ void Write_TLong(ostream &fout, TLong A)
 	if (A.R[0])
 	{
 		fout << ".";
-		for (int i = 1; i <= A.R[0]; i++)
+
+		for (int i = 1; i < A.R[0]; i++)
 		{
 			if (A.R[i] < 10)
 			{
 				fout << "0";
 			}
 
-			fout << (int)A.R[i];  
+			fout << (int)A.R[i];
 		}
-		//fout << (int)A.R[A.R[0]];
+		if (A.R[A.R[0]] < 10)
+		{
+			fout << "0" << (int)A.R[A.R[0]];
+		}
+		else
+		{
+			if (A.R[A.R[0]] % 10 == 0)
+			{
+				A.R[A.R[0]] /= 10;
+			}
+			fout << (int)A.R[A.R[0]];
+		}
 	}
 
 	fout << endl;
@@ -253,11 +285,18 @@ bool Less_TLong(TLong A, TLong B)
 
 	if (!(Equal_TLong(A, B)) && (A.I[0] == B.I[0]))
 	{
-		for (int i = A.I[0]; i > 0 ; i--)
+		for (int i = A.I[0]; i > 0; i--)
 		{
 			if (A.I[i] < B.I[i])
 			{
 				return false;
+			}
+			else
+			{
+				if (A.I[i] != B.I[i])
+				{
+					return true;
+				}
 			}
 		}
 		if (A.R[0] < B.R[0])
@@ -295,7 +334,7 @@ TLong Sum_TLong(TLong A, TLong B)
 	{
 		C.R[i] = B.R[i];
 	}
-	
+
 	if (A.I[0] > B.I[0])
 	{
 		Max = A.I[0];
@@ -332,7 +371,7 @@ TLong Sum_TLong(TLong A, TLong B)
 			C.I[i] += (A.I[i] + B.I[i]) % 100;
 		}
 		else
-		{ 
+		{
 			flag = 0;
 			C.I[i] += A.I[i] + B.I[i];
 		}
@@ -379,21 +418,27 @@ int main()
 	TLong A;
 	TLong B;
 
-	bool flag;
+	if (Read_TLong(fin, A) && Read_TLong(fin, B))
+	{
+		Round_TLong(A);
 
-	flag = Read_TLong(fin, A);
-	flag = Read_TLong(fin, B);
+		Write_TLong(fout, A);
+		Write_TLong(fout, B);
 
-	Write_TLong(fout, A);
-	Write_TLong(fout, B);
+		cout << "A = ";
+		Write_TLong(cout, A);
+		cout << "B = ";
+		Write_TLong(cout, B);
 
-	Round_TLong(A);
-
-	Write_TLong(cout, A);
-	Write_TLong(cout, B);
-
-	Write_TLong(cout, Sum_TLong(A, B));
-	Write_TLong(cout, Dif_TLong(A, B));
+		cout << "Сумма равна: ";
+		Write_TLong(cout, Sum_TLong(A, B));
+		cout << "Разность равна: ";
+		Write_TLong(cout, Dif_TLong(A, B));
+	}
+	else
+	{
+		cout << "Некорректно введенные данные или входной файл не открыт." << endl;
+	}
 
 	system("pause");
 	return 0;
